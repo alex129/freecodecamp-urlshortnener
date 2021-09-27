@@ -55,7 +55,7 @@ router.use((req, res, next) => {
 router.post('/shorturl', (req, res) => {
   shorturlModel.findOne({ original_url: req.body.url }, (err, shorturl) => {
     if (err || !shorturl) {
-      shorturlModel.findOne({}).sort({ sort: 'desc' }).exec((err, result) => {
+      shorturlModel.findOne({}).sort({ short_url: 'desc' }).exec((err, result) => {
         if (!err) {
           var shorturl = new shorturlModel({ original_url: req.body.url, short_url: result ? result.short_url + 1 : 1 });
 
