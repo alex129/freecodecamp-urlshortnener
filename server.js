@@ -49,7 +49,7 @@ router.use((req, res, next) => {
         next();
     });
   } else {
-    next();
+    res.json({ error: 'invalid url' });
   }
 });
 router.post('/shorturl', (req, res) => {
