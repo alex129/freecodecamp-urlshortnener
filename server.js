@@ -42,17 +42,14 @@ app.listen(port, function () {
 const router = express.Router();
 router.use((req, res, next) => {
   if (req.body.url) {
-    req.body.url = req.body.url.replace('https://', '').replace('http://').split('/')[0];
-    dns.lookup(req.body.url, function (err, addresses, family) {
+    const urlDns = req.body.url.replace('https://', '').replace('http://').split('/')[0];
+    dns.lookup(urlDns, function (err, addresses, family) {
       console.log(addresses);
       if (err)
         res.json({ error: 'invalid url' });
-      else
-        next();
     });
-  } else {
-    next();
   }
+  next();
 });
 router.post('/shorturl', (req, res) => {
   if (req.body.url)
