@@ -64,7 +64,7 @@ router.post('/shorturl', (req, res) => {
               console.log(err)
             }
             console.log(data)
-            res.json({original_url: shorturl.original_url, short_url: shorturl.short_url});
+            res.json({original_url: data.original_url, short_url: data.short_url});
           });
         }
       });
