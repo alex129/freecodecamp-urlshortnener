@@ -41,9 +41,9 @@ app.listen(port, function () {
 //SHORT URL
 const router = express.Router();
 router.use((req, res, next) => {
-  req.body.url = req.body['url'];
   if (req.body.url) {
-    dns.lookup(req.body.url.replace('https://', '').replace('http://').split('/')[0], function (err, addresses, family) {
+    req.body.url = req.body.url.replace('https://', '').replace('http://').split('/')[0];
+    dns.lookup(req.body.url, function (err, addresses, family) {
       console.log(addresses);
       if (err)
         res.json({ error: 'invalid url' });
