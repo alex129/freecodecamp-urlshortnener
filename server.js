@@ -51,27 +51,28 @@ router.use((req, res, next) => {
         next();
     });
   } else {
-    res.json({ error: 'invalid url' });
+    next();
   }
 });
 router.post('/shorturl', (req, res) => {
-  shorturlModel.findOne({ original_url: req.body.url }, (err, shorturl) => {
-    if (err || !shorturl) {
-      shorturlModel.findOne({}).sort({ short_url: 'desc' }).exec((err, result) => {
-        if (!err) {
-          var shorturl = new shorturlModel({ original_url: req.body.url, short_url: result ? result.short_url + 1 : 1 });
+  if (req.body.url)
+    shorturlModel.findOne({ original_url: req.body.url }, (err, shorturl) => {
+      if (err || !shorturl) {
+        shorturlModel.findOne({}).sort({ short_url: 'desc' }).exec((err, result) => {
+          if (!err) {
+            var shorturl = new shorturlModel({ original_url: req.body.url, short_url: result ? result.short_url + 1 : 1 });
 
-          shorturl.save(function (err, data) {
-            if (err) {
-              console.log(err)
-            }
-            console.log(data)
-            res.json({original_url: data.original_url, short_url: data.short_url});
-          });
-        }
-      });
-    } else res.json({original_url: shorturl.original_url, short_url: shorturl.short_url});
-  });
+            shorturl.save(function (err, data) {
+              if (err) {
+                console.log(err)
+              }
+              console.log(data)
+              res.json({ original_url: data.original_url, short_url: data.short_url });
+            });
+          }
+        });
+      } else res.json({ original_url: shorturl.original_url, short_url: shorturl.short_url });
+    });
 });
 
 router.get('/shorturl/:id', (req, res) => {
