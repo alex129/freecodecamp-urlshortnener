@@ -41,6 +41,7 @@ app.listen(port, function () {
 //SHORT URL
 const router = express.Router();
 router.use((req, res, next) => {
+  req.body.url = req.body['url'];
   if (req.body.url) {
     dns.lookup(req.body.url.replace('https://', '').replace('http://'), function (err, addresses, family) {
       console.log(addresses);
